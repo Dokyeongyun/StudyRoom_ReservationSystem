@@ -3,6 +3,7 @@ package com.example.studyroomreservationsystem;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -16,12 +17,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Task extends AsyncTask<String, Void, String> {
-    public static String ip ="172.22.229.37"; //자신의 IP번호
+    public static String ip = "172.22.229.37"; //자신의 IP번호
     String sendMsg, receiveMsg;
     // String serverip = "http://"+ip+"/ex/list.jsp"; // 연결할 jsp주소
     String serverip = "http://192.168.43.128:8080/Project2/NewFile.jsp";
 
-    Task(String sendmsg){
+    Task(String sendmsg) {
         this.sendMsg = sendmsg;
     }
 
@@ -40,18 +41,26 @@ public class Task extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("POST"); // 데이터를 POST방식으로 전송한다.
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
 
+            //sendMsg = "id=" + strings[0] + "&pwd=" + strings[1] + "&type=" + strings[2];
+            if (strings[0].equals("ID_doubleCheck")) {
+                Log.i("ID_doubleCheck ", strings[0] + " " + strings[1]);
+                sendMsg = "type=" + strings[0] + "&id=" + strings[1];
+            } else if (strings[0].equals("EMAIL_doubleCheck")) {
+                sendMsg = "type=" + strings[0] + "&email=" + strings[1];
+            } else if (strings[0].equals("Register")) {
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&name=" + strings[2] + "&id=" + strings[3] + "&pwd=" + strings[4]
+                        + "&stuno=" + strings[5] + "&email=" + strings[6] + "&phone=" + strings[7] + "&grade=" + strings[8];
+            } else if (strings[0].equals("Login")){
+                sendMsg = "type=" + strings[0] + "&id=" + strings[1] + "&pwd="+strings[2];
+            }
+
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성
-         //   if(sendMsg.equals("id")){
-                sendMsg = "id="+strings[0]+"&pwd="+strings[1]+"&type="+strings[2];
-         //   }else if(sendMsg.equals("id")){
-         //       sendMsg = "&pwd="+strings[0];
-         //   }
 
             osw.write(sendMsg);
             osw.flush();
 
             // jsp와의 통신이 정상적으로 이루어졌다면,
-            if(conn.getResponseCode() == conn.HTTP_OK) {
+            if (conn.getResponseCode() == conn.HTTP_OK) {
                 InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
                 BufferedReader reader = new BufferedReader(tmp);
                 StringBuffer buffer = new StringBuffer();
@@ -62,7 +71,7 @@ public class Task extends AsyncTask<String, Void, String> {
                 }
                 receiveMsg = buffer.toString();
             } else {
-                Log.i("통신 결과", conn.getResponseCode()+"에러");
+                Log.i("통신 결과", conn.getResponseCode() + "에러");
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
