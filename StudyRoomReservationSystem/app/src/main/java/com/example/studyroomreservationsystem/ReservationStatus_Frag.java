@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
@@ -21,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 public class ReservationStatus_Frag extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private final static String FRAGMENT_TAG = "FRAGMENT_TAG";
 
     private String mParam1;
     private String mParam2;
@@ -51,11 +53,10 @@ public class ReservationStatus_Frag extends Fragment {
         }
     }
 
-    double[] startTimeArr_B = new double[48];
-    double[] endTimeArr_B = new double[48];
 
-    double[] startTimeArr_C = new double[48];
-    double[] endTimeArr_C = new double[48];
+    String tempDate = "";
+    TextView b,c ;
+    LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,8 +64,16 @@ public class ReservationStatus_Frag extends Fragment {
 
         Button date_bt2 = v.findViewById(R.id.date_bt2);
         ImageButton search_bt = v.findViewById(R.id.search_bt);
+        roomBStatus_LL = v.findViewById(R.id.roomBStatus_LL);
+        roomCStatus_LL = v.findViewById(R.id.roomCStatus_LL);
+        refresh_bt = v.findViewById(R.id.refresh_bt);
+        b = v.findViewById(R.id.textView12);
+        c = v.findViewById(R.id.textView13);
+        b.setVisibility(View.INVISIBLE);
+        c.setVisibility(View.INVISIBLE);
+        refresh_bt.setVisibility(View.INVISIBLE);
 
-        TextView show = v.findViewById(R.id.show);
+
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
                 case R.id.date_bt2:
@@ -73,84 +82,22 @@ public class ReservationStatus_Frag extends Fragment {
                 case R.id.search_bt:
                     // DB 에서 date_bt2 의 날짜의 예약현황을 검색하여 출력,
                     String searchDate = date_bt2.getText().toString();
+                    tempDate = searchDate;
 
-                    try {
-                        String result = new Task().execute("SearchDate", searchDate).get();
-                        // result 에는
-                        // 시작시간, 종료시간, 스터디룸 번호 순으로 저장되어있음.
-                        // 이를 구분하여 따로 데이터화.
+                    getResStatus(searchDate);
 
-                        String[] resultSplit = result.split(" ");
-                        String showText = "";
-                        for (int i = 0; i < resultSplit.length; i++) {
-                            if (i % 3 == 0) {
-                                if (resultSplit[i].equals("B")) {
-                                    startTimeArr_B[(int) (Double.parseDouble(resultSplit[i + 1]) / 0.5)] = 1;
-                                    endTimeArr_B[(int) (Double.parseDouble(resultSplit[i + 2]) / 0.5)] = 1;
-                                } else if (resultSplit[i].equals("C")) {
-                                    startTimeArr_C[(int) (Double.parseDouble(resultSplit[i + 1]) / 0.5)] = 1;
-                                    endTimeArr_C[(int) (Double.parseDouble(resultSplit[i + 2]) / 0.5)] = 1;
-                                }
-                            }
-                        }
-
-                        for (int i = 0; i < startTimeArr_B.length; i++) {
-                            showText += startTimeArr_B[i] + " ";
-                        }
-                        showText += "Room B 시작시간 배열 \n";
-
-                        for (int i = 0; i < startTimeArr_C.length; i++) {
-                            showText += startTimeArr_C[i] + " ";
-                        }
-                        showText += "Room C 시작시간 배열 \n";
-
-                        show.setText(showText);
-
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+                    break;
+                case R.id.refresh_bt:
+                    getResStatus(tempDate);
+                    Toast.makeText(getActivity(), "새로고침 되었습니다!", Toast.LENGTH_SHORT).show();
                     break;
             }
         };
 
         date_bt2.setOnClickListener(mClickListener);
         search_bt.setOnClickListener(mClickListener);
+        refresh_bt.setOnClickListener(mClickListener);
 
-
-        int numOfRoom = 2;
-        LinearLayout statusTableLL = v.findViewById(R.id.statusTableLL);
-
-        TableRow[] AMRow = new TableRow[numOfRoom];
-        TableRow[] PMRow = new TableRow[numOfRoom];
-
-        Button[] btn = new Button[24];
-        Button[] btn2 = new Button[24];
-        for (int i = 0; i < numOfRoom; i++) {
-            AMRow[i] = new TableRow(getActivity());
-            PMRow[i] = new TableRow(getActivity());
-            AMRow[i].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
-            PMRow[i].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 30));
-            for (int j = 0; j < 24; j++) {
-                btn[j] = new Button(getActivity());
-                btn[j].setId(j);
-                btn[j].setText(""+j);
-                btn[j].setBackgroundColor(Color.parseColor("#00FFFFFF"));
-                btn[j].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                AMRow[i].addView(btn[j]);
-
-                btn2[j] = new Button(getActivity());
-                btn2[j].setId(j);
-                btn2[j].setText(""+j);
-                btn2[j].setBackgroundColor(Color.parseColor("#00FFFFFF"));
-                btn2[j].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                PMRow[i].addView(btn2[j]);
-            }
-            statusTableLL.addView(AMRow[i]);
-            statusTableLL.addView(PMRow[i]);
-        }
 
         return v;
     }
@@ -171,6 +118,115 @@ public class ReservationStatus_Frag extends Fragment {
         datePickerDialog.getDatePicker().setMaxDate(maxDate.getTime().getTime());
 
         datePickerDialog.show();
+    }
+
+    public void showStatus(LinearLayout statusTableLL, double[] startTimeArr) {
+
+        LinearLayout AMRow = new LinearLayout(getActivity());
+        LinearLayout PMRow = new LinearLayout(getActivity());
+
+        Button[] btn = new Button[24];
+        Button[] btn2 = new Button[24];
+
+        AMRow.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        PMRow.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        TextView AM_text = new TextView(getActivity());
+        TextView PM_text = new TextView(getActivity());
+        AM_text.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100, 1));
+        PM_text.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100, 1));
+        AM_text.setText("AM");
+        PM_text.setText("PM");
+        AM_text.setTextColor(Color.RED);
+        PM_text.setTextColor(Color.BLUE);
+        AM_text.setTextSize(6);
+        PM_text.setTextSize(6);
+
+        AMRow.addView(AM_text);
+        PMRow.addView(PM_text);
+
+        for (int j = 0; j < 24; j++) {
+            btn[j] = new Button(getActivity());
+            btn[j].setId(j);
+            btn[j].setText("" + (j / 2));
+            if (startTimeArr[j] == 1.0) {
+                btn[j].setBackgroundColor(Color.parseColor("#8CFF262D"));
+            } else {
+                btn[j].setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            }
+            btn[j].setTextSize(4);
+            btn[j].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100, 1));
+            AMRow.addView(btn[j]);
+
+            btn2[j] = new Button(getActivity());
+            btn2[j].setId(j);
+            btn2[j].setText("" + ((j / 2) + 12));
+            if (startTimeArr[j + 24] == 1.0) {
+                btn2[j].setBackgroundColor(Color.parseColor("#8CFF262D"));
+            } else {
+                btn2[j].setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            }
+            btn2[j].setTextSize(4);
+            btn2[j].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100, 1));
+            PMRow.addView(btn2[j]);
+        }
+        statusTableLL.addView(AMRow);
+        statusTableLL.addView(PMRow);
+
+    }
+
+    public void getResStatus(String searchDate){
+        if(!searchDate.equals("")){
+            roomBStatus_LL.removeAllViews();
+            roomCStatus_LL.removeAllViews();
+
+            double[] startTimeArr_B = new double[48];
+            double[] startTimeArr_C = new double[48];
+
+            try {
+                String result = new Task().execute("SearchDate", searchDate).get();
+                // result 에는
+                // 시작시간, 종료시간, 스터디룸 번호 순으로 저장되어있음.
+                // 이를 구분하여 따로 데이터화.
+
+                String[] resultSplit = result.split(" ");
+                for (int i = 0; i < resultSplit.length; i++) {
+                    if (i % 3 == 0) {
+                        if (resultSplit[i].equals("B")) {
+                            int s = (int) (Double.parseDouble(resultSplit[i + 1]) / 0.5);
+                            int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
+                            for (int k = s; k < e; k++) {
+                                startTimeArr_B[k] = 1;
+                            }
+                        } else if (resultSplit[i].equals("C")) {
+                            int s = (int) (Double.parseDouble(resultSplit[i + 1]) / 0.5);
+                            int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
+                            for (int k = s; k < e; k++) {
+                                startTimeArr_C[k] = 1;
+                            }
+                        }
+                    }
+                }
+
+                roomBStatus_LL.addView(b);
+                b.setVisibility(View.VISIBLE);
+                showStatus(roomBStatus_LL, startTimeArr_B);
+
+                roomCStatus_LL.addView(c);
+                c.setVisibility(View.VISIBLE);
+                showStatus(roomCStatus_LL, startTimeArr_C);
+
+                refresh_bt.setVisibility(View.VISIBLE);
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

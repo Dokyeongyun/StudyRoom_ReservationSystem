@@ -11,28 +11,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Reservation_Frag extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public Reservation_Frag() {
     }
 
-    // TODO: Rename and change types and number of parameters
     public static Reservation_Frag newInstance(String param1, String param2) {
         Reservation_Frag fragment = new Reservation_Frag();
         Bundle args = new Bundle();
@@ -60,6 +59,7 @@ public class Reservation_Frag extends Fragment {
         View v = inflater.inflate(R.layout.fragment_reservation_, container, false);
 
         Button date_bt = v.findViewById(R.id.date_bt);
+        Button date_bt2 = v.findViewById(R.id.date_bt2);
         Button startTime_bt = v.findViewById(R.id.startTime_bt);
         Button endTime_bt = v.findViewById(R.id.endTime_bt);
         Button roomB_bt = v.findViewById(R.id.roomB_bt);
@@ -99,6 +99,7 @@ public class Reservation_Frag extends Fragment {
                     break;
                 case R.id.reservation_bt:
                     break;
+
             }
         };
 

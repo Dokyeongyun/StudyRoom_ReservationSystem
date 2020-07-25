@@ -76,4 +76,6 @@ public class MenuPage extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
     }
+
+
 }
