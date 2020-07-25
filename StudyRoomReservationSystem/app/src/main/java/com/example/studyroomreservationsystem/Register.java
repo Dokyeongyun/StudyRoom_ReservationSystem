@@ -21,10 +21,10 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        setting();
+        Setting();
     }
 
-    public void setting() {
+    public void Setting() {
         name_et = findViewById(R.id.name_et);
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.pw_et);

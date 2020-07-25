@@ -52,6 +52,8 @@ public class Task extends AsyncTask<String, Void, String> {
                         + "&stuno=" + strings[5] + "&email=" + strings[6] + "&phone=" + strings[7] + "&grade=" + strings[8];
             } else if (strings[0].equals("Login")){
                 sendMsg = "type=" + strings[0] + "&id=" + strings[1] + "&pwd="+strings[2];
+            } else if (strings[0].equals("SearchDate")){
+                sendMsg = "type=" + strings[0] + "&resDate=" + strings[1];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성

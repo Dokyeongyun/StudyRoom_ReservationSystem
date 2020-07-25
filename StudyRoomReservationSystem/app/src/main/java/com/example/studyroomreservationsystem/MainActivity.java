@@ -3,10 +3,7 @@ package com.example.studyroomreservationsystem;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        Setting();
     }
     public void Setting(){
         id_tv = findViewById(R.id.id_tv);
@@ -51,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         pwd = pw_et.getText().toString();
         try {
             String result = new Task().execute("Login", id, pwd).get();
-            Toast.makeText(this, ""+result, Toast.LENGTH_SHORT).show();
             if (result.equals("true")) {
-                Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                Intent intent = new Intent(MainActivity.this, MenuPage.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
             } else if (result.equals("false")) {
                 Toast.makeText(MainActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
             } else if (result.equals("noId")) {
