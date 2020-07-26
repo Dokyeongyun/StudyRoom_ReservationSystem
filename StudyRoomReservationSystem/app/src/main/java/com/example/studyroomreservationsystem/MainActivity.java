@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     Button join_bt, login_bt;
     String id, pwd;
 
+    String userNo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +49,17 @@ public class MainActivity extends AppCompatActivity {
         id = id_et.getText().toString();
         pwd = pw_et.getText().toString();
         try {
-            String result = new Task().execute("Login", id, pwd).get();
-            if (result.equals("true")) {
+            String result2 = new Task().execute("Login", id, pwd).get();
+            String[] result = result2.split(" ");
+            if (result[0].equals("true")) {
+                userNo = result[1];
                 Intent intent = new Intent(MainActivity.this, MenuPage.class);
+                intent.putExtra("userNo", userNo);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
-            } else if (result.equals("false")) {
+            } else if (result[0].equals("false")) {
                 Toast.makeText(MainActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
-            } else if (result.equals("noId")) {
+            } else if (result[0].equals("noId")) {
                 Toast.makeText(MainActivity.this, "아이디가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {

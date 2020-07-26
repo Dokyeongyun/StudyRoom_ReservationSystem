@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MenuPage extends AppCompatActivity {
 
     TextView menu_title_tv;
+    public static String userNo;
 
     private FragmentManager fm = getSupportFragmentManager();
     private FragmentTransaction ft = fm.beginTransaction();
@@ -28,6 +30,9 @@ public class MenuPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menupage);
+
+        Intent intent = getIntent();
+        userNo = intent.getStringExtra("userNo");
 
         BottomNavigationView BNV = findViewById(R.id.bottomNavigationView);
 
@@ -43,10 +48,11 @@ public class MenuPage extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 FragmentTransaction ft = fm.beginTransaction();
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_menu1:
                         ft.replace(R.id.frameLayout, reservation_frag).commitAllowingStateLoss();
                         menu_title_tv.setText("예약하기");
+                        sendBundle(reservation_frag);
                         break;
                     case R.id.navigation_menu2:
                         ft.replace(R.id.frameLayout, reservationStatus_frag).commitAllowingStateLoss();
@@ -75,6 +81,18 @@ public class MenuPage extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
+
+        sendBundle(fragment);
+    }
+
+    public void sendBundle(Fragment fragment) {
+
+        // 프래그먼트로 전송할 번들 객체 생성 및 데이터 삽입
+        Bundle bundle = new Bundle();
+        bundle.putString("userNo", userNo);
+
+        // fragment 로 bundle 전송
+        fragment.setArguments(bundle);
     }
 
 

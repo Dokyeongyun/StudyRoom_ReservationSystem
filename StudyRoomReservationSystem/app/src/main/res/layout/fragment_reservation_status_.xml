@@ -46,8 +46,9 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/showStatusLL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -63,7 +64,7 @@
                     android:id="@+id/textView12"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/border_underline"
                     android:fontFamily="@font/play_bold"
@@ -99,9 +100,9 @@
             <LinearLayout
                 android:id="@+id/refresh_bt"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginRight="20dp"
                 android:background="#4DCD8F"
                 android:clickable="true"
@@ -121,7 +122,6 @@
                     android:src="@drawable/ic_refresh_white_24dp" />
 
                 <Button
-                    android:id="@+id/reservation_bt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

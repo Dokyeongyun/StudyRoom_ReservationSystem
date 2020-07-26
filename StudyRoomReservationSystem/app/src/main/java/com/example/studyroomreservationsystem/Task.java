@@ -41,9 +41,7 @@ public class Task extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("POST"); // 데이터를 POST방식으로 전송한다.
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
 
-            //sendMsg = "id=" + strings[0] + "&pwd=" + strings[1] + "&type=" + strings[2];
             if (strings[0].equals("ID_doubleCheck")) {
-                Log.i("ID_doubleCheck ", strings[0] + " " + strings[1]);
                 sendMsg = "type=" + strings[0] + "&id=" + strings[1];
             } else if (strings[0].equals("EMAIL_doubleCheck")) {
                 sendMsg = "type=" + strings[0] + "&email=" + strings[1];
@@ -54,6 +52,9 @@ public class Task extends AsyncTask<String, Void, String> {
                 sendMsg = "type=" + strings[0] + "&id=" + strings[1] + "&pwd="+strings[2];
             } else if (strings[0].equals("SearchDate")){
                 sendMsg = "type=" + strings[0] + "&resDate=" + strings[1];
+            } else if(strings[0].equals("Insert_Reservation")){
+                sendMsg = "type=" + strings[0] + "&resDate=" + strings[1] + "&resStartTime=" + strings[2] + "&resEndTime=" + strings[3]
+                        + "&resRoom=" + strings[4] + "&userNo=" + strings[5] + "&resNo=" + strings[6];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성

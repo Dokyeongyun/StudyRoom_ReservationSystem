@@ -73,7 +73,6 @@ public class ReservationStatus_Frag extends Fragment {
         c.setVisibility(View.INVISIBLE);
         refresh_bt.setVisibility(View.INVISIBLE);
 
-
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
                 case R.id.date_bt2:
@@ -97,6 +96,11 @@ public class ReservationStatus_Frag extends Fragment {
         date_bt2.setOnClickListener(mClickListener);
         search_bt.setOnClickListener(mClickListener);
         refresh_bt.setOnClickListener(mClickListener);
+
+
+        Calendar Today = Calendar.getInstance();
+        date_bt2.setText(Today.get(Calendar.YEAR)+"-"+(Today.get(Calendar.MONTH)+1)+"-"+Today.get(Calendar.DAY_OF_MONTH));
+        search_bt.callOnClick();
 
 
         return v;
