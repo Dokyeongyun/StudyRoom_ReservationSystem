@@ -75,13 +75,9 @@ public class Reservation_Frag extends Fragment {
         Button roomB_bt = v.findViewById(R.id.roomB_bt);
         Button roomC_bt = v.findViewById(R.id.roomC_bt);
         Button reservation_bt = v.findViewById(R.id.reservation_bt);
-        LinearLayout Status_LL = v.findViewById(R.id.Status_LL);
-        LinearLayout showStatusLL = v.findViewById(R.id.showStatusLL);
 
         AtomicBoolean roomB_selected = new AtomicBoolean(false);
         AtomicBoolean roomC_selected = new AtomicBoolean(false);
-
-        Status_LL.setVisibility(View.GONE);
 
         Calendar Today = Calendar.getInstance();
         date_bt2.setText(Today.get(Calendar.YEAR)+"-"+(Today.get(Calendar.MONTH)+1)+"-"+Today.get(Calendar.DAY_OF_MONTH));
@@ -141,16 +137,12 @@ public class Reservation_Frag extends Fragment {
                     roomB_selected.set(true);
                     roomC_bt.setTextColor(Color.BLACK);
                     roomC_selected.set(false);
-
-                    Status_LL.setVisibility(View.VISIBLE);
                     break;
                 case R.id.roomC_bt:
                     roomC_bt.setTextColor(Color.parseColor("#4DCD8F"));
                     roomC_selected.set(true);
                     roomB_bt.setTextColor(Color.BLACK);
                     roomB_selected.set(false);
-
-                    Status_LL.setVisibility(View.VISIBLE);
                     break;
 
             }
@@ -181,15 +173,6 @@ public class Reservation_Frag extends Fragment {
         }, cHour, cMinute, false);
         timePicker.setMessage("시간입력");
         timePicker.show();
-
-/*        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                b.setText(hourOfDay + "시 " + minute + "분");
-            }
-        }, cHour, cMinute, false);
-        timePickerDialog.setMessage("시간입력");
-        timePickerDialog.show();*/
     }
 
     private void confirm_info(String[] message) {
@@ -220,7 +203,7 @@ public class Reservation_Frag extends Fragment {
                     e.printStackTrace();
                 }
 
-                ((MenuPage) getActivity()).replaceFragment(Home_Frag.newInstance());
+                ((MenuPage) getActivity()).replaceFragment(Mypage_Frag.newInstance());
 
             }
         });

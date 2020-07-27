@@ -18,8 +18,7 @@
                 android:id="@+id/Status_LL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:visibility="invisible">
+                android:orientation="vertical">
 
                 <fragment
                     android:id="@+id/fragment2"
@@ -28,15 +27,6 @@
                     android:layout_height="wrap_content"
                     tools:layout="@layout/fragment_reservation_status_" />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:background="#050505"
-                android:orientation="horizontal"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

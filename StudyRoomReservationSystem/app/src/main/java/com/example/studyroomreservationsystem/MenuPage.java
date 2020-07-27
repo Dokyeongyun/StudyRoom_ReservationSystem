@@ -57,6 +57,7 @@ public class MenuPage extends AppCompatActivity {
                     case R.id.navigation_menu2:
                         ft.replace(R.id.frameLayout, reservationStatus_frag).commitAllowingStateLoss();
                         menu_title_tv.setText("예약현황");
+                        sendBundle(reservationStatus_frag);
                         break;
                     case R.id.navigation_menu3:
                         ft.replace(R.id.frameLayout, home_frag).commitAllowingStateLoss();
@@ -65,6 +66,7 @@ public class MenuPage extends AppCompatActivity {
                     case R.id.navigation_menu4:
                         ft.replace(R.id.frameLayout, mypage_frag).commitAllowingStateLoss();
                         menu_title_tv.setText("마이페이지");
+                        sendBundle(mypage_frag);
                         break;
                     case R.id.navigation_menu5:
                         ft.replace(R.id.frameLayout, precautions_frag).commitAllowingStateLoss();

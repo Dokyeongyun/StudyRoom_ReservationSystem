@@ -55,6 +55,8 @@ public class Task extends AsyncTask<String, Void, String> {
             } else if(strings[0].equals("Insert_Reservation")){
                 sendMsg = "type=" + strings[0] + "&resDate=" + strings[1] + "&resStartTime=" + strings[2] + "&resEndTime=" + strings[3]
                         + "&resRoom=" + strings[4] + "&userNo=" + strings[5] + "&resNo=" + strings[6];
+            } else if (strings[0].equals("Request_myStatus")){
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성

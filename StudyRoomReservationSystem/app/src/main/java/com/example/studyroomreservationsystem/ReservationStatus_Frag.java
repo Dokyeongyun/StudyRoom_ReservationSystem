@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -55,7 +57,7 @@ public class ReservationStatus_Frag extends Fragment {
 
 
     String tempDate = "";
-    TextView b,c ;
+    TextView b, c;
     LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
 
     @Override
@@ -72,6 +74,7 @@ public class ReservationStatus_Frag extends Fragment {
         b.setVisibility(View.INVISIBLE);
         c.setVisibility(View.INVISIBLE);
         refresh_bt.setVisibility(View.INVISIBLE);
+        LinearLayout showStatusLL = v.findViewById(R.id.showStatusLL);
 
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
@@ -82,9 +85,12 @@ public class ReservationStatus_Frag extends Fragment {
                     // DB 에서 date_bt2 의 날짜의 예약현황을 검색하여 출력,
                     String searchDate = date_bt2.getText().toString();
                     tempDate = searchDate;
-
                     getResStatus(searchDate);
 
+                    Animation animation = new AlphaAnimation(0, 1);
+                    animation.setDuration(700);
+                    showStatusLL.setVisibility(View.VISIBLE);
+                    showStatusLL.setAnimation(animation);
                     break;
                 case R.id.refresh_bt:
                     getResStatus(tempDate);
@@ -97,11 +103,9 @@ public class ReservationStatus_Frag extends Fragment {
         search_bt.setOnClickListener(mClickListener);
         refresh_bt.setOnClickListener(mClickListener);
 
-
         Calendar Today = Calendar.getInstance();
-        date_bt2.setText(Today.get(Calendar.YEAR)+"-"+(Today.get(Calendar.MONTH)+1)+"-"+Today.get(Calendar.DAY_OF_MONTH));
-        search_bt.callOnClick();
-
+        date_bt2.setText(Today.get(Calendar.YEAR) + "-" + (Today.get(Calendar.MONTH) + 1) + "-" + Today.get(Calendar.DAY_OF_MONTH));
+        //search_bt.callOnClick();
 
         return v;
     }
@@ -179,8 +183,8 @@ public class ReservationStatus_Frag extends Fragment {
 
     }
 
-    public void getResStatus(String searchDate){
-        if(!searchDate.equals("")){
+    public void getResStatus(String searchDate) {
+        if (!searchDate.equals("")) {
             roomBStatus_LL.removeAllViews();
             roomCStatus_LL.removeAllViews();
 
@@ -228,7 +232,7 @@ public class ReservationStatus_Frag extends Fragment {
                 e.printStackTrace();
             }
 
-        }else {
+        } else {
             Toast.makeText(getActivity(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
         }
     }

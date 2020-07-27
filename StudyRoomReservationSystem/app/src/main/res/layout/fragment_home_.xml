@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#00FFFFFF"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -22,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:fontFamily="@font/play_bold"
+                android:fontFamily="@font/bmdohyeon"
                 android:text="예약하기" />
 
             <Button
@@ -31,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:fontFamily="@font/play_bold"
+                android:fontFamily="@font/bmdohyeon"
                 android:text="예약현황" />
         </LinearLayout>
 
@@ -46,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:fontFamily="@font/play_bold"
+                android:fontFamily="@font/bmdohyeon"
                 android:text="마이페이지" />
 
             <Button
@@ -55,9 +56,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                android:fontFamily="@font/play_bold"
+                android:fontFamily="@font/bmdohyeon"
                 android:text="이용방법" />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
