@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 public class ReservationStatus_Frag extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private final static String FRAGMENT_TAG = "FRAGMENT_TAG";
 
     private String mParam1;
     private String mParam2;
@@ -56,9 +58,9 @@ public class ReservationStatus_Frag extends Fragment {
     }
 
 
-    String tempDate = "";
-    TextView b, c;
-    LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
+    private String tempDate = "";
+    private TextView b, c;
+    private LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class ReservationStatus_Frag extends Fragment {
         datePickerDialog.show();
     }
 
-    public void showStatus(LinearLayout statusTableLL, double[] startTimeArr) {
+    public void showStatus(LinearLayout statusTableLL, double[] startTimeArr, int[] userNoArr) {
 
         LinearLayout AMRow = new LinearLayout(getActivity());
         LinearLayout PMRow = new LinearLayout(getActivity());
@@ -177,40 +179,74 @@ public class ReservationStatus_Frag extends Fragment {
             btn2[j].setTextSize(4);
             btn2[j].setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100, 1));
             PMRow.addView(btn2[j]);
+
+            int finalJ = j;
+            btn[j].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+
+                        String result = new Task().execute("GetUserInfo", String.valueOf(userNoArr[finalJ])).get();
+                        String str1 = new String(result.getBytes(StandardCharsets.UTF_8));
+                        if(!result.equals("GetUserInfo_FAIL")){
+
+                            Toast.makeText(getActivity(), str1, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            btn2[j].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        String result = new Task().execute("GetUserInfo", String.valueOf(userNoArr[finalJ+24])).get();
+                        if(!result.equals("GetUserInfo_FAIL")){
+                            Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         statusTableLL.addView(AMRow);
         statusTableLL.addView(PMRow);
-
     }
 
-    public void getResStatus(String searchDate) {
+    private void getResStatus(String searchDate) {
         if (!searchDate.equals("")) {
             roomBStatus_LL.removeAllViews();
             roomCStatus_LL.removeAllViews();
 
             double[] startTimeArr_B = new double[48];
             double[] startTimeArr_C = new double[48];
+            int[] userNoArr_B = new int[48];
+            int[] userNoArr_C = new int[48];
 
             try {
                 String result = new Task().execute("SearchDate", searchDate).get();
                 // result 에는
-                // 시작시간, 종료시간, 스터디룸 번호 순으로 저장되어있음.
+                // 스터디룸 번호, 시작시간, 종료시간, 사용자번호 순으로 저장되어있음.
                 // 이를 구분하여 따로 데이터화.
 
                 String[] resultSplit = result.split(" ");
                 for (int i = 0; i < resultSplit.length; i++) {
-                    if (i % 3 == 0) {
+                    if (i % 4 == 0) {
                         if (resultSplit[i].equals("B")) {
                             int s = (int) (Double.parseDouble(resultSplit[i + 1]) / 0.5);
                             int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
                             for (int k = s; k < e; k++) {
                                 startTimeArr_B[k] = 1;
+                                userNoArr_B[k] = Integer.parseInt(resultSplit[i+3]);
                             }
                         } else if (resultSplit[i].equals("C")) {
                             int s = (int) (Double.parseDouble(resultSplit[i + 1]) / 0.5);
                             int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
                             for (int k = s; k < e; k++) {
                                 startTimeArr_C[k] = 1;
+                                userNoArr_C[k] = Integer.parseInt(resultSplit[i+3]);
                             }
                         }
                     }
@@ -218,17 +254,15 @@ public class ReservationStatus_Frag extends Fragment {
 
                 roomBStatus_LL.addView(b);
                 b.setVisibility(View.VISIBLE);
-                showStatus(roomBStatus_LL, startTimeArr_B);
+                showStatus(roomBStatus_LL, startTimeArr_B, userNoArr_B);
 
                 roomCStatus_LL.addView(c);
                 c.setVisibility(View.VISIBLE);
-                showStatus(roomCStatus_LL, startTimeArr_C);
+                showStatus(roomCStatus_LL, startTimeArr_C,userNoArr_C);
 
                 refresh_bt.setVisibility(View.VISIBLE);
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
 

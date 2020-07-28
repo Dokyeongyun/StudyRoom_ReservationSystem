@@ -191,7 +191,7 @@ public class Reservation_Frag extends Fragment {
                 // 확인버튼 클릭 시 실행 메소드
                 try {
                     String result = new Task().execute("Insert_Reservation", message[0], message[1], message[2], message[3], userNo, null).get();
-
+  
                     if (result.equals("Reservation_OK")) {
                         Toast.makeText(getActivity(), "예약이 완료되었습니다. 감사합니다.", Toast.LENGTH_SHORT).show();
                     } else {

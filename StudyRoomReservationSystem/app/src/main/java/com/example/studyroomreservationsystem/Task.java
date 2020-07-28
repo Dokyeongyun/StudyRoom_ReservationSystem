@@ -3,12 +3,12 @@ package com.example.studyroomreservationsystem;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -57,6 +57,10 @@ public class Task extends AsyncTask<String, Void, String> {
                         + "&resRoom=" + strings[4] + "&userNo=" + strings[5] + "&resNo=" + strings[6];
             } else if (strings[0].equals("Request_myStatus")){
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
+            } else if(strings[0].equals("Delete_Reservation")){
+                sendMsg = "type=" + strings[0] + "&resNo=" + strings[1];
+            } else if(strings[0].equals("GetUserInfo")){
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성
@@ -66,7 +70,7 @@ public class Task extends AsyncTask<String, Void, String> {
 
             // jsp와의 통신이 정상적으로 이루어졌다면,
             if (conn.getResponseCode() == conn.HTTP_OK) {
-                InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
                 BufferedReader reader = new BufferedReader(tmp);
                 StringBuffer buffer = new StringBuffer();
 
@@ -78,8 +82,6 @@ public class Task extends AsyncTask<String, Void, String> {
             } else {
                 Log.i("통신 결과", conn.getResponseCode() + "에러");
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
