@@ -1,6 +1,7 @@
 package com.example.studyroomreservationsystem;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
@@ -58,6 +58,7 @@ public class ReservationStatus_Frag extends Fragment {
     }
 
 
+    public static final int REQUEST_TIMEINFO = 102;
     private String tempDate = "";
     private TextView b, c;
     private LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
@@ -184,29 +185,20 @@ public class ReservationStatus_Frag extends Fragment {
             btn[j].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-
-                        String result = new Task().execute("GetUserInfo", String.valueOf(userNoArr[finalJ])).get();
-                        String str1 = new String(result.getBytes(StandardCharsets.UTF_8));
-                        if(!result.equals("GetUserInfo_FAIL")){
-
-                            Toast.makeText(getActivity(), str1, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
+                    if (userNoArr[finalJ] != 0) {
+                        Intent intent = new Intent(getActivity(), ReservationStatus_PopUp.class);
+                        intent.putExtra("userNo", String.valueOf(userNoArr[finalJ]));
+                        startActivityForResult(intent, REQUEST_TIMEINFO);
                     }
                 }
             });
             btn2[j].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        String result = new Task().execute("GetUserInfo", String.valueOf(userNoArr[finalJ+24])).get();
-                        if(!result.equals("GetUserInfo_FAIL")){
-                            Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
+                    if (userNoArr[finalJ + 24] != 0) {
+                        Intent intent = new Intent(getActivity(), ReservationStatus_PopUp.class);
+                        intent.putExtra("userNo", String.valueOf(userNoArr[finalJ + 24]));
+                        startActivityForResult(intent, REQUEST_TIMEINFO);
                     }
                 }
             });
@@ -239,14 +231,14 @@ public class ReservationStatus_Frag extends Fragment {
                             int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
                             for (int k = s; k < e; k++) {
                                 startTimeArr_B[k] = 1;
-                                userNoArr_B[k] = Integer.parseInt(resultSplit[i+3]);
+                                userNoArr_B[k] = Integer.parseInt(resultSplit[i + 3]);
                             }
                         } else if (resultSplit[i].equals("C")) {
                             int s = (int) (Double.parseDouble(resultSplit[i + 1]) / 0.5);
                             int e = (int) (Double.parseDouble(resultSplit[i + 2]) / 0.5);
                             for (int k = s; k < e; k++) {
                                 startTimeArr_C[k] = 1;
-                                userNoArr_C[k] = Integer.parseInt(resultSplit[i+3]);
+                                userNoArr_C[k] = Integer.parseInt(resultSplit[i + 3]);
                             }
                         }
                     }
@@ -258,7 +250,7 @@ public class ReservationStatus_Frag extends Fragment {
 
                 roomCStatus_LL.addView(c);
                 c.setVisibility(View.VISIBLE);
-                showStatus(roomCStatus_LL, startTimeArr_C,userNoArr_C);
+                showStatus(roomCStatus_LL, startTimeArr_C, userNoArr_C);
 
                 refresh_bt.setVisibility(View.VISIBLE);
 

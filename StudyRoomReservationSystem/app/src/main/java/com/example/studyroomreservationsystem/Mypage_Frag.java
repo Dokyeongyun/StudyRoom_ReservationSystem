@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,7 +65,10 @@ public class Mypage_Frag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mypage_, container, false);
-        LinearLayout myStatus_LL = v.findViewById(R.id.myStatus_LL);
+        LinearLayout myReservation_LL = v.findViewById(R.id.myReservation_LL);
+        TextView myPage_name_tv = v.findViewById(R.id.myPage_name_tv);
+        TextView myPage_dept_tv = v.findViewById(R.id.myPage_dept_tv);
+
 
 /*
         나의 예약현황에 들어갈 정보
@@ -75,9 +79,6 @@ public class Mypage_Frag extends Fragment {
         order by resDate
         이 때, 오늘 날짜 이후의 예약만 출력하도록 함
 */
-
-
-
         Bundle bundle = getArguments();
         userNo = bundle.getString("userNo");
 
@@ -85,6 +86,7 @@ public class Mypage_Frag extends Fragment {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
         String today_s = simpleDate.format(new Date(System.currentTimeMillis()));
 
+        // "나의 예약 Part"
         try {
             String result = new Task().execute("Request_myStatus", userNo).get();
 
@@ -114,9 +116,9 @@ public class Mypage_Frag extends Fragment {
                     }
                 });
 
-                myStatus_LL.addView(nothing_image);
-                myStatus_LL.addView(nothing);
-                myStatus_LL.addView(add_bt);
+                myReservation_LL.addView(nothing_image);
+                myReservation_LL.addView(nothing);
+                myReservation_LL.addView(add_bt);
             } else {
                 String[] resultSplit = result.split(" ");
 
@@ -129,9 +131,9 @@ public class Mypage_Frag extends Fragment {
 
                 // 각 데이터 배열에 값 저장
                 for (int i = 0; i < resultSplit.length; i++) {
-                    if(i%dataNum == 0){
-                        resNoArr[i/dataNum] = resultSplit[i];
-                    }else if (i % dataNum == 1) {
+                    if (i % dataNum == 0) {
+                        resNoArr[i / dataNum] = resultSplit[i];
+                    } else if (i % dataNum == 1) {
                         resDateArr[i / dataNum] = resultSplit[i];
                     } else if (i % dataNum == 2) {
                         resStartTimeArr[i / dataNum] = resultSplit[i];
@@ -150,7 +152,7 @@ public class Mypage_Frag extends Fragment {
                         TextView border = new TextView(getActivity());
                         border.setBackgroundColor(Color.parseColor("#FF999999"));
                         border.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 5));
-                        myStatus_LL.addView(border);
+                        myReservation_LL.addView(border);
 
                         TextView myStatus_dateTV = new TextView(getActivity());
                         String[] tempDate = resDateArr[index].split("-");
@@ -219,13 +221,60 @@ public class Mypage_Frag extends Fragment {
                     myStatus_resInfoLL.addView(myStatus_upperLL);
                     myStatus_resInfoLL.addView(myStatus_lowerLL);
 
-                    myStatus_LL.addView(myStatus_dateLL);
-                    myStatus_LL.addView(myStatus_resInfoLL);
+                    myReservation_LL.addView(myStatus_dateLL);
+                    myReservation_LL.addView(myStatus_resInfoLL);
                 }
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        // "회원정보 출력 Part"
+        try {
+            String result = "";
+            // id, 이름, 학번, 이메일, 휴대폰번호, 학년 순서
+            result = new Task().execute("Get_UserInfo", userNo).get();
+
+            if (!result.equals("Get_UserInfo_FAIL")) {
+                String[] resultSplit = result.split(" ");
+
+                String text = " · 이용자명: " + resultSplit[1] + "\n"
+                        + " · 학번: " + resultSplit[2] + "\n"
+                        + " · 이메일: " + resultSplit[3] + "\n"
+                        + " · 전화번호: " + resultSplit[4] + "\n"
+                        + " · 학년: " + resultSplit[5] + "\n";
+
+                myPage_name_tv.setText(resultSplit[1]);
+                myPage_dept_tv.setText("공간정보공학과  " + resultSplit[5] + "학년");
+            }
+
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        ImageButton myPage_setting_bt = v.findViewById(R.id.myPage_setting_bt);
+        ImageButton myPage_personalInfo_bt = v.findViewById(R.id.myPage_personalInfo_bt);
+
+
+        View.OnClickListener mClickListener = v1 -> {
+            switch (v1.getId()) {
+                case R.id.myPage_setting_bt:
+                    Intent intent = new Intent(getActivity(), MyPage_Setting.class);
+                    startActivity(intent);
+                    break;
+                case R.id.myPage_personalInfo_bt:
+                    Intent intent2 = new Intent(getActivity(), MyPage_PersonalInfo.class);
+                    intent2.putExtra("userNo", userNo);
+                    startActivity(intent2);
+                    break;
+            }
+        };
+
+        myPage_setting_bt.setOnClickListener(mClickListener);
+        myPage_personalInfo_bt.setOnClickListener(mClickListener);
+
         return v;
     }
 

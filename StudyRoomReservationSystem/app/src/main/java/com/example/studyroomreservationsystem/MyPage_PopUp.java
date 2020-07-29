@@ -62,20 +62,16 @@ public class MyPage_PopUp extends Activity {
         return true;
     }
 
-    @Override
+/*
+     @Override
     public void onBackPressed() {
         //안드로이드 백버튼 막기
         return;
     }
+*/
 
     public void onClose(View view) {
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 기능이 수행되는 컨텍스트상의 모든 요소를 다시그리는거야
     }
 
     public void cancelBT(View view) throws ExecutionException, InterruptedException {

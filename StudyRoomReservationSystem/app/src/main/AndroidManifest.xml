@@ -14,6 +14,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".MyPage_PersonalInfo"></activity>
+        <activity android:name=".MyPage_Setting" />
+        <activity
+            android:name=".ReservationStatus_PopUp"
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".MyPage_PopUp"
             android:theme="@android:style/Theme.Dialog" />
