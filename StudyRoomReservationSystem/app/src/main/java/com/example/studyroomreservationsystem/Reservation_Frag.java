@@ -197,14 +197,10 @@ public class Reservation_Frag extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "예약에 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
-
                 ((MenuPage) getActivity()).replaceFragment(Mypage_Frag.newInstance());
-
             }
         });
         builder.setNegativeButton("취소", null);

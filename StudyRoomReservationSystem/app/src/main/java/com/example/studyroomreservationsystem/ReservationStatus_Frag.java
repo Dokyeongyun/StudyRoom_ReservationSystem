@@ -257,10 +257,8 @@ public class ReservationStatus_Frag extends Fragment {
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
-
         } else {
             Toast.makeText(getActivity(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

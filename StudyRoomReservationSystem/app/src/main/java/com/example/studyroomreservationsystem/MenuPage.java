@@ -36,6 +36,8 @@ public class MenuPage extends AppCompatActivity {
 
         BottomNavigationView BNV = findViewById(R.id.bottomNavigationView);
 
+        sendBundle(home_frag);
+
         // 첫 화면
         //FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.frameLayout, home_frag).commitAllowingStateLoss();
@@ -62,6 +64,7 @@ public class MenuPage extends AppCompatActivity {
                     case R.id.navigation_menu3:
                         ft.replace(R.id.frameLayout, home_frag).commitAllowingStateLoss();
                         menu_title_tv.setText("공간정보 스터디룸 예약시스템");
+                        sendBundle(home_frag);
                         break;
                     case R.id.navigation_menu4:
                         ft.replace(R.id.frameLayout, mypage_frag).commitAllowingStateLoss();
@@ -80,11 +83,12 @@ public class MenuPage extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
+        sendBundle(fragment);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment).commitAllowingStateLoss();
 
-        sendBundle(fragment);
     }
 
     public void sendBundle(Fragment fragment) {
