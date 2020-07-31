@@ -76,9 +76,10 @@ public class ChatActivity extends AppCompatActivity {
                     SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
                     StringBuffer sb = new StringBuffer(edt.getText().toString());
-                    if (sb.length() >= 15) {
-                        for (int i = 1; i <= sb.length() / 15; i++) {
-                            sb.insert(15 * i, "\n");
+                    int lineWord = 45;
+                    if (sb.length() >= lineWord) {
+                        for (int i = 1; i <= sb.length() / lineWord; i++) {
+                            sb.insert(lineWord * i, "\n");
                         }
                     }
 
@@ -89,11 +90,14 @@ public class ChatActivity extends AppCompatActivity {
                     //myRef.setValue(new ChatVO(R.drawable.account_circle_48dp, name, sb.toString(), timeNow.format(today)));
                     // 채팅내역 덮어쓰기 방지
                     myRef.push().setValue(new ChatVO(R.drawable.account_circle_48dp, name, sb.toString(), timeNow.format(today)));
+                    myRef.push().setValue(new ChatVO(R.drawable.account_circle_48dp, "테스트상대", sb.toString(), timeNow.format(today)));
+                    myRef.push().setValue(new ChatVO(R.drawable.ic_adb_black_24dp, "봇로는하말로꾸거", sb.reverse().toString(), timeNow.format(today)));
                     edt.setText("");
 
                 }
             }
         });
+
 
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -101,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
                 ChatVO value = dataSnapshot.getValue(ChatVO.class); // 괄호 안 : 꺼낼 자료 형태
                 list.add(value);
                 adapter.notifyDataSetChanged();
+                listview.setSelection(list.size()-1);
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.example.studyroomreservationsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -57,7 +58,8 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(this, "처리중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
                         if (result.equals("Register_OK")) {
                             Toast.makeText(this, "축하합니다. 회원가입이 완료되었습니다!", Toast.LENGTH_SHORT).show();
-                            finish();
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
                         }
                     }
                 } else {
@@ -69,6 +71,8 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(this, "아이디와 이메일 중복검사를 실행해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+
                 break;
             case R.id.id_bt:
                 // 아이디 중복검사
@@ -96,6 +100,16 @@ public class Register extends AppCompatActivity {
                     email_isPossible = true;
                 }
                 break;
+            case R.id.backBT:
+                Intent intent2 = new Intent(this, MainActivity.class);
+                startActivity(intent2);
+                break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

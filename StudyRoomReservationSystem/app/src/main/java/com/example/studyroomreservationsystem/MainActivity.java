@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    TextView id_tv, pw_tv, idStatus_tv;
+    TextView id_tv, pw_tv;
     EditText id_et, pw_et;
     Button join_bt, login_bt;
     String id, pwd;
@@ -25,19 +26,13 @@ public class MainActivity extends AppCompatActivity {
 
         Setting();
     }
-    public void Setting(){
-        id_tv = findViewById(R.id.id_tv);
-        pw_tv = findViewById(R.id.pw_tv);
-        idStatus_tv = findViewById(R.id.idStatus_tv);
 
+    public void Setting() {
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.pw_et);
 
         join_bt = findViewById(R.id.join_bt);
         login_bt = findViewById(R.id.login_bt);
-
-        id = id_et.getText().toString();
-        pwd = pw_et.getText().toString();
     }
 
     public void Join(View view) {
@@ -65,5 +60,4 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
-
 }

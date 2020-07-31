@@ -15,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MenuPage extends AppCompatActivity {
 
+    private BackPressCloseHandler backPressCloseHandler;
+
     TextView menu_title_tv;
     public static String userNo;
 
@@ -30,6 +32,8 @@ public class MenuPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menupage);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         Intent intent = getIntent();
         userNo = intent.getStringExtra("userNo");
@@ -101,5 +105,9 @@ public class MenuPage extends AppCompatActivity {
         fragment.setArguments(bundle);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
+    }
 }

@@ -183,7 +183,7 @@ public class Reservation_Frag extends Fragment {
                 + "스터디룸 " + message[3] + "\n";
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(" * 내용을 확인해주세요.");
+        builder.setTitle(" 예약내용을 확인해주세요.");
         builder.setMessage(resInfo_message);
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override

@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ReservationStatus_PopUp extends Activity {
 
+    String userNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +23,7 @@ public class ReservationStatus_PopUp extends Activity {
         TextView timeInfo_tv = findViewById(R.id.timeInfo_tv);
 
         Intent intent = getIntent();
-        String userNo = intent.getStringExtra("userNo");
+        userNo = intent.getStringExtra("userNo");
 
         try {
             String result = new Task().execute("Get_UserInfo", userNo).get();
@@ -43,6 +44,13 @@ public class ReservationStatus_PopUp extends Activity {
         }
     }
 
-    public void onClose(View view) { finish(); }
+    public void onClose(View view) {
+        finish();
+    }
 
+    public void onChatBT(View view) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("userNo",userNo);
+        startActivity(intent);
+    }
 }

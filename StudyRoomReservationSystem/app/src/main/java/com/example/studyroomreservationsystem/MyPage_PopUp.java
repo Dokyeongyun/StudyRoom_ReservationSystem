@@ -61,7 +61,7 @@ public class MyPage_PopUp extends Activity {
         }
         return true;
     }
- 
+
 /*
      @Override
     public void onBackPressed() {

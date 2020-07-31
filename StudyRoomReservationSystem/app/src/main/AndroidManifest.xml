@@ -14,7 +14,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".MyPage_PersonalInfo"></activity>
+        <activity android:name=".ChatActivity"/>
+        <activity android:name=".ChatTest" />
+        <activity android:name=".MyPage_PersonalInfo" />
         <activity android:name=".MyPage_Setting" />
         <activity
             android:name=".ReservationStatus_PopUp"
@@ -24,7 +26,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Register" />
         <activity android:name=".MenuPage" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

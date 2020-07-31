@@ -17,10 +17,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Task extends AsyncTask<String, Void, String> {
-    public static String ip = "172.22.229.37"; //자신의 IP번호
+    //public static String ip = "172.22.229.37"; //자신의 IP번호
     String sendMsg, receiveMsg;
     // String serverip = "http://"+ip+"/ex/list.jsp"; // 연결할 jsp주소
-    String serverip = "http://192.168.43.128:8080/Project2/NewFile.jsp";
+    String serverip = "http://183.102.244.176:8080/Project2/NewFile.jsp";
 
     Task(String sendmsg) {
         this.sendMsg = sendmsg;
