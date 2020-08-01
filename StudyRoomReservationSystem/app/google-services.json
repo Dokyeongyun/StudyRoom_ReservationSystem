@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "228699937778",
+    "firebase_url": "https://studyroomreservationsystem.firebaseio.com",
+    "project_id": "studyroomreservationsystem",
+    "storage_bucket": "studyroomreservationsystem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228699937778:android:c092c28e330a5be8f5296b",
+        "android_client_info": {
+          "package_name": "com.example.studyroomreservationsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228699937778-14bletteivpepl648jqegravlffrl2t2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studyroomreservationsystem",
+            "certificate_hash": "d3f4482ebecf59d50f956552631ea14b71d177d5"
+          }
+        },
+        {
+          "client_id": "228699937778-0nrsl4g7rh7jvorf24rb2t4h88mn4k8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKdvAR4SfJO4emlqk4rxfKF7aO14iU__g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228699937778-0nrsl4g7rh7jvorf24rb2t4h88mn4k8r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

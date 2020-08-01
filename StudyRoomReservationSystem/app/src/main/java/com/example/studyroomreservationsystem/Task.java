@@ -8,11 +8,9 @@ import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -20,7 +18,7 @@ public class Task extends AsyncTask<String, Void, String> {
     //public static String ip = "172.22.229.37"; //자신의 IP번호
     String sendMsg, receiveMsg;
     // String serverip = "http://"+ip+"/ex/list.jsp"; // 연결할 jsp주소
-    String serverip = "http://183.102.244.176:8080/Project2/NewFile.jsp";
+    private String serverip = "http://192.168.43.128:8080/Project2/NewFile.jsp";
 
     Task(String sendmsg) {
         this.sendMsg = sendmsg;
@@ -48,21 +46,25 @@ public class Task extends AsyncTask<String, Void, String> {
             } else if (strings[0].equals("Register")) {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&name=" + strings[2] + "&id=" + strings[3] + "&pwd=" + strings[4]
                         + "&stuno=" + strings[5] + "&email=" + strings[6] + "&phone=" + strings[7] + "&grade=" + strings[8];
-            } else if (strings[0].equals("Login")){
-                sendMsg = "type=" + strings[0] + "&id=" + strings[1] + "&pwd="+strings[2];
-            } else if (strings[0].equals("SearchDate")){
+            } else if (strings[0].equals("Login")) {
+                sendMsg = "type=" + strings[0] + "&id=" + strings[1] + "&pwd=" + strings[2];
+            } else if (strings[0].equals("SearchDate")) {
                 sendMsg = "type=" + strings[0] + "&resDate=" + strings[1];
-            } else if(strings[0].equals("Insert_Reservation")){
+            } else if (strings[0].equals("Insert_Reservation")) {
                 sendMsg = "type=" + strings[0] + "&resDate=" + strings[1] + "&resStartTime=" + strings[2] + "&resEndTime=" + strings[3]
                         + "&resRoom=" + strings[4] + "&userNo=" + strings[5] + "&resNo=" + strings[6];
-            } else if (strings[0].equals("Request_myStatus")){
+            } else if (strings[0].equals("Request_myStatus")) {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
-            } else if(strings[0].equals("Delete_Reservation")){
+            } else if (strings[0].equals("Delete_Reservation")) {
                 sendMsg = "type=" + strings[0] + "&resNo=" + strings[1];
-            } else if(strings[0].equals("GetUserInfo")){
+            } else if (strings[0].equals("GetUserInfo")) {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
-            }else if(strings[0].equals("Get_UserInfo")){
+            } else if (strings[0].equals("Get_UserInfo")) {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
+            } else if (strings[0].equals("Get_Password")) {
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
+            } else if (strings[0].equals("Update_Password")) {
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&pwd=" + strings[2];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성

@@ -8,13 +8,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="공간정보공학과 스터디룸예약시스템"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ChatActivity"/>
+        <activity android:name=".ChangeInfo"></activity>
+        <activity android:name=".ChatActivity" />
         <activity android:name=".ChatTest" />
         <activity android:name=".MyPage_PersonalInfo" />
         <activity android:name=".MyPage_Setting" />
@@ -26,7 +27,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Register" />
         <activity android:name=".MenuPage" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

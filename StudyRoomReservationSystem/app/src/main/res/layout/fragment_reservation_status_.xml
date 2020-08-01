@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="125dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/play_bold"
                 android:gravity="center"

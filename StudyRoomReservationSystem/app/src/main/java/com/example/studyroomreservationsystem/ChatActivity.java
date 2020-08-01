@@ -102,7 +102,7 @@ public class ChatActivity extends AppCompatActivity {
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ChatVO value = dataSnapshot.getValue(ChatVO.class); // 괄호 안 : 꺼낼 자료 형태
+                ChatVO value = dataSnapshot.getValue(ChatVO.class);
                 list.add(value);
                 adapter.notifyDataSetChanged();
                 listview.setSelection(list.size()-1);
