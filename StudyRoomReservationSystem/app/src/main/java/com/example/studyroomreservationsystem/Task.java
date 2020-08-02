@@ -65,6 +65,12 @@ public class Task extends AsyncTask<String, Void, String> {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1];
             } else if (strings[0].equals("Update_Password")) {
                 sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&pwd=" + strings[2];
+            }else if(strings[0].equals("Update_Email")){
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&email=" + strings[2];
+            }else if(strings[0].equals("Update_Phone")){
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&phone=" + strings[2];
+            }else if(strings[0].equals("Update_Grade")){
+                sendMsg = "type=" + strings[0] + "&userNo=" + strings[1] + "&grade=" + strings[2];
             }
 
             // 보낼 데이터가 여러 개일 경우 &로 구분하여 작성

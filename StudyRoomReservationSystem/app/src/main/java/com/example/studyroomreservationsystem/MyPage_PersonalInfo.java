@@ -1,5 +1,6 @@
 package com.example.studyroomreservationsystem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,12 +18,19 @@ import java.util.concurrent.ExecutionException;
 public class MyPage_PersonalInfo extends AppCompatActivity {
 
     public static int NUMBER_OF_INFO = 8;
+    static final int MODIFY_USERINFO = 102;
 
+    LinearLayout personalInfo_LL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page__personal_info);
 
+        loadingActivity();
+
+    }
+
+    public void loadingActivity(){
         String name = "", stuNo = "", email = "", phone = "", grade = "", id = "";
         // 개인정보 변경 액티비티
         String[] resultSplit = new String[8];
@@ -44,7 +52,8 @@ public class MyPage_PersonalInfo extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        LinearLayout personalInfo_LL = findViewById(R.id.personalInfo_LL);
+        personalInfo_LL = findViewById(R.id.personalInfo_LL);
+        personalInfo_LL.removeAllViews();
 
         String[] infoTitleArr = new String[]{"회원번호", "ID", "이름", "비밀번호", "학번", "이메일", "휴대전화", "학년"};
         String[] infoValueArr = new String[]{userNo, id, name, "**********", stuNo, email, phone, grade};
@@ -90,7 +99,7 @@ public class MyPage_PersonalInfo extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(), ChangeInfo.class);
                         intent.putExtra("Title", infoTitleArr[finalI]);
-                        startActivity(intent);
+                        startActivityForResult(intent, MODIFY_USERINFO);
                     }
                 });
                 infoValue_LL.addView(infoChange_bt);
@@ -98,5 +107,13 @@ public class MyPage_PersonalInfo extends AppCompatActivity {
             personalInfo_LL.addView(infoTitle_LL);
             personalInfo_LL.addView(infoValue_LL);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadingActivity();
+
     }
 }

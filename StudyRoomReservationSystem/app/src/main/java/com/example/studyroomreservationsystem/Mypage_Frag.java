@@ -59,15 +59,16 @@ public class Mypage_Frag extends Fragment {
     }
 
     private static String userNo;
-    static final int REQUEST_DELETE = 101;
+    private static final int REQUEST_DELETE = 101;
+    private TextView myPage_name_tv, myPage_dept_tv;
 
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mypage_, container, false);
         LinearLayout myReservation_LL = v.findViewById(R.id.myReservation_LL);
-        TextView myPage_name_tv = v.findViewById(R.id.myPage_name_tv);
-        TextView myPage_dept_tv = v.findViewById(R.id.myPage_dept_tv);
+        myPage_name_tv = v.findViewById(R.id.myPage_name_tv);
+        myPage_dept_tv = v.findViewById(R.id.myPage_dept_tv);
 
 
 /*
@@ -230,33 +231,10 @@ public class Mypage_Frag extends Fragment {
         }
 
         // "회원정보 출력 Part"
-        try {
-            String result = "";
-            // id, 이름, 학번, 이메일, 휴대폰번호, 학년 순서
-            result = new Task().execute("Get_UserInfo", userNo).get();
-
-            if (!result.equals("Get_UserInfo_FAIL")) {
-                String[] resultSplit = result.split(" ");
-
-                String text = " · 이용자명: " + resultSplit[1] + "\n"
-                        + " · 학번: " + resultSplit[2] + "\n"
-                        + " · 이메일: " + resultSplit[3] + "\n"
-                        + " · 전화번호: " + resultSplit[4] + "\n"
-                        + " · 학년: " + resultSplit[5] + "\n";
-
-                myPage_name_tv.setText(resultSplit[1]);
-                myPage_dept_tv.setText("공간정보공학과  " + resultSplit[5] + "학년");
-            }
-
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        refresh(myPage_name_tv, myPage_dept_tv);
 
         ImageButton myPage_setting_bt = v.findViewById(R.id.myPage_setting_bt);
         ImageButton myPage_personalInfo_bt = v.findViewById(R.id.myPage_personalInfo_bt);
-
 
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
@@ -276,6 +254,31 @@ public class Mypage_Frag extends Fragment {
         myPage_personalInfo_bt.setOnClickListener(mClickListener);
 
         return v;
+    }
+
+    private void refresh(TextView myPage_name_tv, TextView myPage_dept_tv) {
+        // "회원정보 출력 Part"
+        try {
+            String result = "";
+            // id, 이름, 학번, 이메일, 휴대폰번호, 학년 순서
+            result = new Task().execute("Get_UserInfo", userNo).get();
+
+            if (!result.equals("Get_UserInfo_FAIL")) {
+                String[] resultSplit = result.split(" ");
+
+                myPage_name_tv.setText(resultSplit[1]);
+                myPage_dept_tv.setText("공간정보공학과  " + resultSplit[5] + "학년");
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh(myPage_name_tv, myPage_dept_tv);
     }
 
     @Override
