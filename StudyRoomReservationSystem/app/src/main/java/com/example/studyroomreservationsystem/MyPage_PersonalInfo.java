@@ -3,34 +3,68 @@ package com.example.studyroomreservationsystem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
+
+import static android.provider.MediaStore.Images;
+
+import static android.provider.MediaStore.Images.Media;
+import static com.example.studyroomreservationsystem.MenuPage.userNo;
 
 public class MyPage_PersonalInfo extends AppCompatActivity {
 
     public static int NUMBER_OF_INFO = 8;
     static final int MODIFY_USERINFO = 102;
+    static final int GET_GALLERY_IMAGE = 103;
 
+    ImageButton profilePicture_bt;
+    Bitmap profilePhoto;
     LinearLayout personalInfo_LL;
+    String temp = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page__personal_info);
-
         loadingActivity();
-
+        try {
+            loadingPhoto();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void loadingActivity(){
+    public void loadingActivity() {
+        profilePicture_bt = findViewById(R.id.profilePicture_bt);
+
         String name = "", stuNo = "", email = "", phone = "", grade = "", id = "";
         // 개인정보 변경 액티비티
         String[] resultSplit = new String[8];
@@ -109,11 +143,104 @@ public class MyPage_PersonalInfo extends AppCompatActivity {
         }
     }
 
+    public void loadingPhoto() throws ExecutionException, InterruptedException {
+        String result = new Task().execute("Get_ProfilePhoto", userNo).get();
+        if(result.contains("Get_ProfilePhoto_FAIL")){
+            Toast.makeText(this, "이미지를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
+        }else{
+            Bitmap getBitmap = StringToBitMap(result);
+            profilePicture_bt.setImageBitmap(getBitmap);
+            profilePicture_bt.setBackground(new ShapeDrawable(new OvalShape()));
+            profilePicture_bt.setClipToOutline(true);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         loadingActivity();
+    }
+
+    public void ChangePicture_bt(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        /*
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        */
+        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent, GET_GALLERY_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri selectedImageUri = data.getData();
+            profilePicture_bt.setImageURI(selectedImageUri);
+            profilePicture_bt.setBackground(new ShapeDrawable(new OvalShape()));
+            profilePicture_bt.setClipToOutline(true);
+
+            try {
+                profilePhoto = Media.getBitmap(getContentResolver(), data.getData());
+                profilePhoto = resize(profilePhoto);
+/*                //    pd = new ProgressDialog(this);
+                //  pd.setMessage("이미지를 저장중입니다. 잠시만 기다려주세요");
+                // pd.show();*/
+                BitMapToString(profilePhoto);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);    //bitmap compress
+        byte[] arr = baos.toByteArray();
+        String image = Base64.encodeToString(arr, Base64.DEFAULT);
+
+        try {
+            temp = URLEncoder.encode(image, "utf-8");
+            String result = new Task().execute("Update_ProfilePhoto", userNo, temp).get();
+            if (result.equals("Update_ProfilePhoto_OK")) {
+                Toast.makeText(this, "이미지 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "이미지 저장에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public static Bitmap StringToBitMap(String image){
+        try{
+            byte [] encodeByte=Base64.decode(image,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
+
+    private Bitmap resize(Bitmap bm) {
+
+        Configuration config = getResources().getConfiguration();
+		/*if(config.smallestScreenWidthDp>=800)
+			bm = Bitmap.createScaledBitmap(bm, 400, 240, true);//이미지 크기로 인해 용량초과
+		else */
+        if (config.smallestScreenWidthDp >= 600)
+            bm = Bitmap.createScaledBitmap(bm, 300, 300, true);
+        else if (config.smallestScreenWidthDp >= 400)
+            bm = Bitmap.createScaledBitmap(bm, 200, 200, true);
+        else if (config.smallestScreenWidthDp >= 360)
+            bm = Bitmap.createScaledBitmap(bm, 180, 180, true);
+        else
+            bm = Bitmap.createScaledBitmap(bm, 160, 160,true);
+
+        return bm;
 
     }
 }

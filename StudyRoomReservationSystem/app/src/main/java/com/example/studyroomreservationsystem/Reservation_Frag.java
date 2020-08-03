@@ -27,38 +27,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Reservation_Frag extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     public Reservation_Frag() {
     }
 
-    public static Reservation_Frag newInstance(String param1, String param2) {
-        Reservation_Frag fragment = new Reservation_Frag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static Reservation_Frag newInstance() {
+    static Reservation_Frag newInstance() {
         return new Reservation_Frag();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
+
     public static String userNo;
+    private Button date_bt2, startTime_bt, endTime_bt, roomB_bt, roomC_bt, reservation_bt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,35 +51,29 @@ public class Reservation_Frag extends Fragment {
         Bundle bundle = getArguments();
         userNo = bundle.getString("userNo");
 
-
-        Button date_bt2 = v.findViewById(R.id.date_bt2);
-        Button startTime_bt = v.findViewById(R.id.startTime_bt);
-        Button endTime_bt = v.findViewById(R.id.endTime_bt);
-        Button roomB_bt = v.findViewById(R.id.roomB_bt);
-        Button roomC_bt = v.findViewById(R.id.roomC_bt);
-        Button reservation_bt = v.findViewById(R.id.reservation_bt);
+        // findViewById
+        setting(v);
 
         AtomicBoolean roomB_selected = new AtomicBoolean(false);
         AtomicBoolean roomC_selected = new AtomicBoolean(false);
 
         Calendar Today = Calendar.getInstance();
-        date_bt2.setText(Today.get(Calendar.YEAR)+"-"+(Today.get(Calendar.MONTH)+1)+"-"+Today.get(Calendar.DAY_OF_MONTH));
+        date_bt2.setText(Today.get(Calendar.YEAR) + "-" + (Today.get(Calendar.MONTH) + 1) + "-" + Today.get(Calendar.DAY_OF_MONTH));
 
 
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
                 case R.id.reservation_bt:
-                    // roomB or roomC => if(roomB_selected == true) => roomB
-                    // 시작시간, 종료시간 => startTime.getText().toString() 에서 hour, minute 분리
-                    // 예약날짜 => date_bt2.getText().toString();
-                    // String result = new Task().execute("Reservation", resRoom, resStartTime, resEndTime, resDate, userNo);
-                    // 여기서 userNo를 어떻게 알아낼 것인가!
                     String resRoom = "", resStartTime = "", resEndTime = "";
+
+                    // roomB인지 roomC인지 Check
                     if (roomB_selected.get()) {
                         resRoom = "B";
                     } else if (roomC_selected.get()) {
                         resRoom = "C";
                     }
+
+                    // double형 숫자를 시, 분 형태로 표현
                     String[] tempTime = startTime_bt.getText().toString().split("시 ");
                     if (tempTime.length == 2) {
                         if (tempTime[1].equals("0분")) {
@@ -115,16 +92,15 @@ public class Reservation_Frag extends Fragment {
                         }
                     }
 
+                    // 날짜
                     String resDate = date_bt2.getText().toString();
 
                     if (!resDate.equals("") && !resRoom.equals("") && !resStartTime.equals("") && !resEndTime.equals("")) {
-                        String[] resInfo = new String[] {resDate, resStartTime, resEndTime, resRoom};
+                        String[] resInfo = new String[]{resDate, resStartTime, resEndTime, resRoom};
                         confirm_info(resInfo);
-
                     } else {
                         Toast.makeText(getActivity(), "예약 정보를 모두 입력해주세요.", Toast.LENGTH_SHORT).show();
                     }
-
                     break;
                 case R.id.startTime_bt:
                     showTime(startTime_bt);
@@ -144,7 +120,6 @@ public class Reservation_Frag extends Fragment {
                     roomB_bt.setTextColor(Color.BLACK);
                     roomB_selected.set(false);
                     break;
-
             }
         };
 
@@ -155,6 +130,15 @@ public class Reservation_Frag extends Fragment {
         roomC_bt.setOnClickListener(mClickListener);
 
         return v;
+    }
+
+    private void setting(View v) {
+        date_bt2 = v.findViewById(R.id.date_bt2);
+        startTime_bt = v.findViewById(R.id.startTime_bt);
+        endTime_bt = v.findViewById(R.id.endTime_bt);
+        roomB_bt = v.findViewById(R.id.roomB_bt);
+        roomC_bt = v.findViewById(R.id.roomC_bt);
+        reservation_bt = v.findViewById(R.id.reservation_bt);
     }
 
     private void showTime(Button b) {

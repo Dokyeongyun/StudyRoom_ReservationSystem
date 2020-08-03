@@ -25,59 +25,30 @@ import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 public class ReservationStatus_Frag extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     public ReservationStatus_Frag() {
     }
 
-    public static ReservationStatus_Frag newInstance(String param1, String param2) {
-        ReservationStatus_Frag fragment = new ReservationStatus_Frag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static ReservationStatus_Frag newInstance() {
+    static ReservationStatus_Frag newInstance() {
         return new ReservationStatus_Frag();
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
-
-    public static final int REQUEST_TIMEINFO = 102;
+    private static final int REQUEST_TIMEINFO = 102;
     private String tempDate = "";
     private TextView b, c;
-    private LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt;
+    private LinearLayout roomBStatus_LL, roomCStatus_LL, refresh_bt, showStatusLL;
+    private ImageButton search_bt;
+    private Button date_bt2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_reservation_status_, container, false);
 
-        Button date_bt2 = v.findViewById(R.id.date_bt2);
-        ImageButton search_bt = v.findViewById(R.id.search_bt);
-        roomBStatus_LL = v.findViewById(R.id.roomBStatus_LL);
-        roomCStatus_LL = v.findViewById(R.id.roomCStatus_LL);
-        refresh_bt = v.findViewById(R.id.refresh_bt);
-        b = v.findViewById(R.id.textView12);
-        c = v.findViewById(R.id.textView13);
-        b.setVisibility(View.INVISIBLE);
-        c.setVisibility(View.INVISIBLE);
-        refresh_bt.setVisibility(View.INVISIBLE);
-        LinearLayout showStatusLL = v.findViewById(R.id.showStatusLL);
+        setting(v);
 
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
@@ -108,9 +79,21 @@ public class ReservationStatus_Frag extends Fragment {
 
         Calendar Today = Calendar.getInstance();
         date_bt2.setText(Today.get(Calendar.YEAR) + "-" + (Today.get(Calendar.MONTH) + 1) + "-" + Today.get(Calendar.DAY_OF_MONTH));
-        //search_bt.callOnClick();
-
         return v;
+    }
+
+    private void setting(View v) {
+        date_bt2 = v.findViewById(R.id.date_bt2);
+        search_bt = v.findViewById(R.id.search_bt);
+        roomBStatus_LL = v.findViewById(R.id.roomBStatus_LL);
+        roomCStatus_LL = v.findViewById(R.id.roomCStatus_LL);
+        refresh_bt = v.findViewById(R.id.refresh_bt);
+        b = v.findViewById(R.id.textView12);
+        c = v.findViewById(R.id.textView13);
+        b.setVisibility(View.INVISIBLE);
+        c.setVisibility(View.INVISIBLE);
+        refresh_bt.setVisibility(View.INVISIBLE);
+        showStatusLL = v.findViewById(R.id.showStatusLL);
     }
 
     private void showDate(Button b) {
@@ -131,8 +114,7 @@ public class ReservationStatus_Frag extends Fragment {
         datePickerDialog.show();
     }
 
-    public void showStatus(LinearLayout statusTableLL, double[] startTimeArr, int[] userNoArr) {
-
+    private void showStatus(LinearLayout statusTableLL, double[] startTimeArr, int[] userNoArr) {
         LinearLayout AMRow = new LinearLayout(getActivity());
         LinearLayout PMRow = new LinearLayout(getActivity());
 

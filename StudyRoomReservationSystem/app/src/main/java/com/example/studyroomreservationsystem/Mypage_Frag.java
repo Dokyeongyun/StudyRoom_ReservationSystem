@@ -2,12 +2,17 @@ package com.example.studyroomreservationsystem;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,48 +24,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+import static com.example.studyroomreservationsystem.MyPage_PersonalInfo.StringToBitMap;
+
 
 public class Mypage_Frag extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     public Mypage_Frag() {
     }
 
-    public static Mypage_Frag newInstance(String param1, String param2) {
-        Mypage_Frag fragment = new Mypage_Frag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static Mypage_Frag newInstance() {
+    static Mypage_Frag newInstance() {
         return new Mypage_Frag();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     private static String userNo;
     private static final int REQUEST_DELETE = 101;
     private TextView myPage_name_tv, myPage_dept_tv;
+    private ImageButton myPage_personalInfo_bt;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -69,7 +56,8 @@ public class Mypage_Frag extends Fragment {
         LinearLayout myReservation_LL = v.findViewById(R.id.myReservation_LL);
         myPage_name_tv = v.findViewById(R.id.myPage_name_tv);
         myPage_dept_tv = v.findViewById(R.id.myPage_dept_tv);
-
+        myPage_personalInfo_bt = v.findViewById(R.id.myPage_personalInfo_bt);
+        ImageButton myPage_setting_bt = v.findViewById(R.id.myPage_setting_bt);
 
 /*
         나의 예약현황에 들어갈 정보
@@ -231,10 +219,8 @@ public class Mypage_Frag extends Fragment {
         }
 
         // "회원정보 출력 Part"
-        refresh(myPage_name_tv, myPage_dept_tv);
+        refresh();
 
-        ImageButton myPage_setting_bt = v.findViewById(R.id.myPage_setting_bt);
-        ImageButton myPage_personalInfo_bt = v.findViewById(R.id.myPage_personalInfo_bt);
 
         View.OnClickListener mClickListener = v1 -> {
             switch (v1.getId()) {
@@ -249,18 +235,17 @@ public class Mypage_Frag extends Fragment {
                     break;
             }
         };
-
         myPage_setting_bt.setOnClickListener(mClickListener);
         myPage_personalInfo_bt.setOnClickListener(mClickListener);
 
         return v;
     }
 
-    private void refresh(TextView myPage_name_tv, TextView myPage_dept_tv) {
+    private void refresh() {
         // "회원정보 출력 Part"
+        String result = "";
+        // id, 이름, 학번, 이메일, 휴대폰번호, 학년 순서
         try {
-            String result = "";
-            // id, 이름, 학번, 이메일, 휴대폰번호, 학년 순서
             result = new Task().execute("Get_UserInfo", userNo).get();
 
             if (!result.equals("Get_UserInfo_FAIL")) {
@@ -269,16 +254,24 @@ public class Mypage_Frag extends Fragment {
                 myPage_name_tv.setText(resultSplit[1]);
                 myPage_dept_tv.setText("공간정보공학과  " + resultSplit[5] + "학년");
             }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
+            String result2 = new Task().execute("Get_ProfilePhoto", userNo).get();
+            if (result2.contains("Get_ProfilePhoto_FAIL")) {
+                Toast.makeText(getActivity(), "이미지를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Bitmap getBitmap = StringToBitMap(result2);
+                myPage_personalInfo_bt.setImageBitmap(getBitmap);
+            }
+            myPage_personalInfo_bt.setBackground(new ShapeDrawable(new OvalShape()));
+            myPage_personalInfo_bt.setClipToOutline(true);
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh(myPage_name_tv, myPage_dept_tv);
+        refresh();
     }
 
     @Override

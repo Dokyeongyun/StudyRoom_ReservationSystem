@@ -72,11 +72,13 @@
 
                     <ImageButton
                         android:id="@+id/myPage_personalInfo_bt"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="20dp"
                         android:layout_weight="1"
                         android:background="#00FFFFFF"
-                        android:src="@drawable/account_circle_48dp" />
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/account_circle_48dp"/>
                 </LinearLayout>
 
                 <LinearLayout
